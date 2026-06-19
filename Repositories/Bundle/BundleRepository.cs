@@ -32,7 +32,9 @@ public sealed class BundleRepository : IBundleRepository
         command.Parameters.Add("@camera", SqlDbType.VarChar, 100).Value = input.Camera;
         command.Parameters.Add("@steelDiameter", SqlDbType.VarChar, 100).Value = input.SteelDiameter;
         command.Parameters.Add("@itemCount", SqlDbType.Int).Value = input.ItemCount;
-        command.Parameters.Add("@countedAt", SqlDbType.DateTime2).Value = input.CountedAt.UtcDateTime;
+        command.Parameters.Add("@countStartedAt", SqlDbType.DateTime2).Value = input.CountStartedAt.UtcDateTime;
+        command.Parameters.Add("@countFinishedAt", SqlDbType.DateTime2).Value = input.CountFinishedAt.UtcDateTime;
+        command.Parameters.Add("@countTime", SqlDbType.VarChar, 8).Value = input.CountTime;
         command.Parameters.Add("@videoPath", SqlDbType.NVarChar, 500).Value = (object?)videoPath ?? DBNull.Value;
 
         var result = await command.ExecuteScalarAsync(cancellationToken);

@@ -28,7 +28,9 @@ public sealed class SiderClient : ISiderClient
                 bundleCode = bundle.BundleCode,
                 steelDiameter = bundle.SteelDiameter,
                 itemCount = bundle.ItemCount,
-                countedAt = bundle.CountedAt,
+                countStartedAt = bundle.CountStartedAt,
+                countFinishedAt = bundle.CountFinishedAt,
+                countTime = bundle.CountTime,
                 bundleType = bundle.BundleType,
                 videoPath = bundle.VideoPath
             })

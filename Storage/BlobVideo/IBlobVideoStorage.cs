@@ -7,6 +7,5 @@ public interface IBlobVideoStorage
     Task<string?> SaveAsync(
         UploadedVideo? video,
         string bundleCode,
-        DateTimeOffset countedAt,
         CancellationToken cancellationToken);
 }

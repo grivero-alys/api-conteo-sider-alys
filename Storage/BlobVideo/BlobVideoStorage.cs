@@ -6,6 +6,8 @@ namespace api_conteo_sider_alys.Storage.BlobVideo;
 
 public sealed class BlobVideoStorage : IBlobVideoStorage
 {
+    private const string LimaTimeZoneId = "America/Lima";
+
     private readonly string? _connectionString = Environment.GetEnvironmentVariable("BlobStorageConnectionString");
     private readonly string _containerName = Environment.GetEnvironmentVariable("BlobStorageContainerName") ?? "bundle-videos";
     private readonly string _enterprise = Environment.GetEnvironmentVariable("Enterprise") ?? "sider";
@@ -13,7 +15,6 @@ public sealed class BlobVideoStorage : IBlobVideoStorage
     public async Task<string?> SaveAsync(
         UploadedVideo? video,
         string bundleCode,
-        DateTimeOffset countedAt,
         CancellationToken cancellationToken)
     {
         if (video is null)
@@ -26,6 +27,7 @@ public sealed class BlobVideoStorage : IBlobVideoStorage
             throw new InvalidOperationException("BlobStorageConnectionString is required when a video payload is sent.");
         }
 
+        var limaNow = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, GetLimaTimeZone());
         var containerClient = new BlobContainerClient(_connectionString, _containerName);
         await containerClient.CreateIfNotExistsAsync(PublicAccessType.None, cancellationToken: cancellationToken);
 
@@ -33,9 +35,9 @@ public sealed class BlobVideoStorage : IBlobVideoStorage
         var blobName = string.Join(
             "/",
             SanitizeSegment(_enterprise),
-            countedAt.ToString("yyyy"),
-            countedAt.ToString("MM"),
-            countedAt.ToString("dd"),
+            limaNow.ToString("yyyy"),
+            limaNow.ToString("MM"),
+            limaNow.ToString("dd"),
             fileName);
 
         var blobClient = containerClient.GetBlobClient(blobName);
@@ -50,6 +52,18 @@ public sealed class BlobVideoStorage : IBlobVideoStorage
             cancellationToken: cancellationToken);
 
         return blobClient.Uri.ToString();
+    }
+
+    private static TimeZoneInfo GetLimaTimeZone()
+    {
+        try
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById(LimaTimeZoneId);
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("SA Pacific Standard Time");
+        }
     }
 
     private static string SanitizeSegment(string value)

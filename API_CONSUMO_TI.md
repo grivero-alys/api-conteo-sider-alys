@@ -40,6 +40,41 @@ Body -> form-data
 
 No configurar manualmente el header `Content-Type`; Postman lo genera automaticamente con el `boundary`.
 
+## Valores permitidos
+
+### camera
+
+Valores aceptados:
+
+```text
+camera01
+camera02
+camera03
+camera04
+```
+
+### steelDiameter
+
+Enviar el codigo numerico (`diameterMm`) que corresponde al diametro nominal:
+
+| Diametro nominal | steelDiameter |
+| --- | --- |
+| 6mm | `6000` |
+| 8mm | `8000` |
+| 3/8" | `9525` |
+| 12mm | `12000` |
+| 1/2" | `12700` |
+| 5/8" | `15875` |
+| 3/4" | `19050` |
+| 1" | `25400` |
+| 1 3/8" | `34925` |
+
+Valores permitidos:
+
+```text
+6000, 8000, 9525, 12000, 12700, 15875, 19050, 25400, 34925
+```
+
 ## Endpoint 1: Conteo Individual
 
 Registra un conteo individual.
@@ -59,9 +94,10 @@ NewBundleIndividual
 | Campo | Tipo | Requerido | Ejemplo | Descripcion |
 | --- | --- | --- | --- | --- |
 | `headquarter` | Text | Si | `chimbote` | Sede o planta donde se realiza el conteo. |
-| `camera` | Text | Si | `camera01` | Codigo de camara. |
-| `countedAt` | Text | Si | `2026-06-15 12:30:50` | Fecha/hora del conteo. |
-| `steelDiameter` | Text | Si | `2` | Diametro del acero/fierro. |
+| `camera` | Text | Si | `camera01` | Codigo de camara. Valores: `camera01`, `camera02`, `camera03`, `camera04`. |
+| `countStartedAt` | Text | Si | `2026-06-15 12:30:00` | Fecha/hora de inicio del conteo. |
+| `countFinishedAt` | Text | Si | `2026-06-15 12:30:50` | Fecha/hora de fin del conteo. |
+| `steelDiameter` | Text | Si | `12700` | Codigo numerico del diametro (`diameterMm`). Ver tabla de valores permitidos. |
 | `itemCount` | Text | Si | `10` | Cantidad contada. Debe ser mayor a cero. |
 | `video` | File | Si | `conteo.mp4` | Archivo de video del conteo. |
 
@@ -72,8 +108,9 @@ curl -X POST "https://fn-sider.azurewebsites.net/api/bundle/individual" \
   -H "x-functions-key: <FUNCTION_KEY>" \
   -F "headquarter=chimbote" \
   -F "camera=camera01" \
-  -F "countedAt=2026-06-15 12:30:50" \
-  -F "steelDiameter=2" \
+  -F "countStartedAt=2026-06-15 12:30:00" \
+  -F "countFinishedAt=2026-06-15 12:30:50" \
+  -F "steelDiameter=12700" \
   -F "itemCount=10" \
   -F "video=@./conteo.mp4;type=video/mp4"
 ```
@@ -97,9 +134,10 @@ NewBundleGrouped
 | Campo | Tipo | Requerido | Ejemplo | Descripcion |
 | --- | --- | --- | --- | --- |
 | `headquarter` | Text | Si | `chimbote` | Sede o planta donde se realiza el conteo. |
-| `camera` | Text | Si | `camera01` | Codigo de camara. |
-| `countedAt` | Text | Si | `2026-06-15 12:30:50` | Fecha/hora del conteo. |
-| `steelDiameter` | Text | Si | `2` | Diametro del acero/fierro. |
+| `camera` | Text | Si | `camera01` | Codigo de camara. Valores: `camera01`, `camera02`, `camera03`, `camera04`. |
+| `countStartedAt` | Text | Si | `2026-06-15 12:30:00` | Fecha/hora de inicio del conteo. |
+| `countFinishedAt` | Text | Si | `2026-06-15 12:30:50` | Fecha/hora de fin del conteo. |
+| `steelDiameter` | Text | Si | `12700` | Codigo numerico del diametro (`diameterMm`). Ver tabla de valores permitidos. |
 | `itemCount` | Text | Si | `10` | Cantidad contada. Debe ser mayor a cero. |
 | `video` | File | Si | `conteo.mp4` | Archivo de video del conteo. |
 
@@ -110,8 +148,9 @@ curl -X POST "https://fn-sider.azurewebsites.net/api/bundle/grouped" \
   -H "x-functions-key: <FUNCTION_KEY>" \
   -F "headquarter=chimbote" \
   -F "camera=camera01" \
-  -F "countedAt=2026-06-15 12:30:50" \
-  -F "steelDiameter=2" \
+  -F "countStartedAt=2026-06-15 12:30:00" \
+  -F "countFinishedAt=2026-06-15 12:30:50" \
+  -F "steelDiameter=12700" \
   -F "itemCount=10" \
   -F "video=@./conteo.mp4;type=video/mp4"
 ```
@@ -131,9 +170,11 @@ Ejemplo:
   "bundleId": 80,
   "bundleCode": "SIDER-CHIMBOTE-CAMERA01-INDIVIDUAL-20260615123050",
   "bundleType": "INDIVIDUAL",
-  "steelDiameter": "2",
+  "steelDiameter": "12700",
   "itemCount": 10,
-  "countedAt": "2026-06-15T12:30:50+00:00",
+  "countStartedAt": "2026-06-15T12:30:00+00:00",
+  "countFinishedAt": "2026-06-15T12:30:50+00:00",
+  "countTime": "00:00:50",
   "videoPath": "https://stplataformaindustriadev.blob.core.windows.net/bundle-videos/sider/2026/06/15/SIDER-CHIMBOTE-CAMERA01-INDIVIDUAL-20260615123050.mp4",
   "sentToSider": false
 }
@@ -208,6 +249,6 @@ El campo `traceId` sirve para buscar el error en logs de Azure.
 2. URL: usar `/api/bundle/individual` o `/api/bundle/grouped`.
 3. Header: agregar `x-functions-key`.
 4. Body: seleccionar `form-data`.
-5. Agregar los campos `headquarter`, `camera`, `countedAt`, `steelDiameter`, `itemCount`.
+5. Agregar los campos `headquarter`, `camera`, `countStartedAt`, `countFinishedAt`, `steelDiameter`, `itemCount`.
 6. Agregar `video` como tipo `File`.
 7. Enviar el request.

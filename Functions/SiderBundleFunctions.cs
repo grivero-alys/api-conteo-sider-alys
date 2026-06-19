@@ -36,7 +36,8 @@ public sealed class SiderBundleFunctions
             {
                 BundleType = BundleTypes.Individual,
                 Headquarter = GetField(form.Fields, "headquarter"),
-                CountedAt = GetDateField(form.Fields, "countedAt"),
+                CountStartedAt = GetDateField(form.Fields, "countStartedAt"),
+                CountFinishedAt = GetDateField(form.Fields, "countFinishedAt"),
                 Camera = GetField(form.Fields, "camera"),
                 SteelDiameter = GetField(form.Fields, "steelDiameter"),
                 ItemCount = GetIntField(form.Fields, "itemCount"),
@@ -74,7 +75,8 @@ public sealed class SiderBundleFunctions
             {
                 BundleType = BundleTypes.Grouped,
                 Headquarter = GetField(form.Fields, "headquarter"),
-                CountedAt = GetDateField(form.Fields, "countedAt"),
+                CountStartedAt = GetDateField(form.Fields, "countStartedAt"),
+                CountFinishedAt = GetDateField(form.Fields, "countFinishedAt"),
                 Camera = GetField(form.Fields, "camera"),
                 SteelDiameter = GetField(form.Fields, "steelDiameter"),
                 ItemCount = GetIntField(form.Fields, "itemCount"),
@@ -113,9 +115,19 @@ public sealed class SiderBundleFunctions
             return "camera es requerido para generar el código de lote.";
         }
 
-        if (input.CountedAt == default)
+        if (input.CountStartedAt == default)
         {
-            return "countedAt es requerido.";
+            return "countStartedAt es requerido.";
+        }
+
+        if (input.CountFinishedAt == default)
+        {
+            return "countFinishedAt es requerido.";
+        }
+
+        if (input.CountFinishedAt < input.CountStartedAt)
+        {
+            return "countFinishedAt debe ser mayor o igual a countStartedAt.";
         }
 
         if (string.IsNullOrWhiteSpace(input.SteelDiameter))

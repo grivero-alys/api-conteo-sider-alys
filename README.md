@@ -45,7 +45,8 @@ Ejemplo con `curl`:
 ```shell
 curl -X POST "https://fn-sider.azurewebsites.net/api/bundle/individual?code=TU_FUNCTION_KEY" \
   -F "headquarter=LIMA" \
-  -F "countedAt=2026-06-12T22:45:00Z" \
+  -F "countStartedAt=2026-06-12T22:40:00Z" \
+  -F "countFinishedAt=2026-06-12T22:45:00Z" \
   -F "camera=CAM01" \
   -F "steelDiameter=1/2" \
   -F "itemCount=10" \
@@ -67,7 +68,8 @@ Ejemplo con `curl`:
 ```shell
 curl -X POST "https://fn-sider.azurewebsites.net/api/bundle/grouped?code=TU_FUNCTION_KEY" \
   -F "headquarter=LIMA" \
-  -F "countedAt=2026-06-12T22:45:00Z" \
+  -F "countStartedAt=2026-06-12T22:40:00Z" \
+  -F "countFinishedAt=2026-06-12T22:45:00Z" \
   -F "camera=CAM01" \
   -F "steelDiameter=1/2" \
   -F "itemCount=100" \
@@ -81,7 +83,8 @@ El request debe enviarse como `multipart/form-data`.
 Campos requeridos:
 
 - `headquarter`: sede o planta del conteo. Ejemplo: `LIMA`.
-- `countedAt`: fecha y hora del conteo en formato ISO 8601. Ejemplo: `2026-06-12T22:45:00Z`.
+- `countStartedAt`: fecha y hora de inicio del conteo en formato ISO 8601. Ejemplo: `2026-06-12T22:40:00Z`.
+- `countFinishedAt`: fecha y hora de fin del conteo en formato ISO 8601. Ejemplo: `2026-06-12T22:45:00Z`.
 - `camera`: código de cámara. Ejemplo: `CAM01`.
 - `steelDiameter`: diámetro del fierro. Ejemplo: `1/2`.
 - `itemCount`: cantidad contada. Debe ser mayor a cero.
@@ -113,7 +116,9 @@ Ejemplo:
   "bundleType": "INDIVIDUAL",
   "rebarDiameter": "1/2",
   "itemCount": 10,
-  "countedAt": "2026-06-12T22:45:00+00:00",
+  "countStartedAt": "2026-06-12T22:40:00+00:00",
+  "countFinishedAt": "2026-06-12T22:45:00+00:00",
+  "countTime": "00:05:00",
   "videoPath": "https://storage.blob.core.windows.net/bundle-videos/sider/2026/06/12/SIDER-LIMA-CAM01-INDIVIDUAL-20260612224500000-A1B2C3D4.mp4",
   "sentToSider": true
 }

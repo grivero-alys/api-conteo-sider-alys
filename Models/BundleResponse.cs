@@ -7,7 +7,9 @@ public sealed class BundleResponse
     public required string BundleType { get; init; }
     public required string SteelDiameter { get; init; }
     public int ItemCount { get; init; }
-    public DateTimeOffset CountedAt { get; init; }
+    public DateTimeOffset CountStartedAt { get; init; }
+    public DateTimeOffset CountFinishedAt { get; init; }
+    public required string CountTime { get; init; }
     public string? VideoPath { get; init; }
     public bool SentToSider { get; init; }
 }

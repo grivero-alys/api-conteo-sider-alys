@@ -37,7 +37,6 @@ public sealed class SiderBundleService : ISiderBundleService
         var videoPath = await _blobVideoStorage.SaveAsync(
             input.Video,
             bundleCode,
-            input.CountedAt,
             cancellationToken);
 
         var bundleId = await _bundleRepository.CreateAsync(input, bundleCode, videoPath, cancellationToken);
@@ -49,7 +48,9 @@ public sealed class SiderBundleService : ISiderBundleService
             BundleType = input.BundleType,
             SteelDiameter = input.SteelDiameter,
             ItemCount = input.ItemCount,
-            CountedAt = input.CountedAt,
+            CountStartedAt = input.CountStartedAt,
+            CountFinishedAt = input.CountFinishedAt,
+            CountTime = input.CountTime,
             VideoPath = videoPath
         };
 
@@ -69,7 +70,9 @@ file static class BundleResponseExtensions
             BundleType = response.BundleType,
             SteelDiameter = response.SteelDiameter,
             ItemCount = response.ItemCount,
-            CountedAt = response.CountedAt,
+            CountStartedAt = response.CountStartedAt,
+            CountFinishedAt = response.CountFinishedAt,
+            CountTime = response.CountTime,
             VideoPath = response.VideoPath,
             SentToSider = sentToSider
         };

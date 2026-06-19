@@ -5,7 +5,9 @@ CREATE OR ALTER PROCEDURE dbo.sp_fn_bundle_i_bundle
     @camera varchar(100),
     @steelDiameter varchar(100),
     @itemCount int,
-    @countedAt datetime2(7),
+    @countStartedAt datetime2(7),
+    @countFinishedAt datetime2(7),
+    @countTime varchar(8),
     @videoPath nvarchar(500) = NULL
 AS
 BEGIN
@@ -17,6 +19,9 @@ BEGIN
         idCamera,
         isAlert,
         itemCount,
+        countStartedAt,
+        countFinishedAt,
+        countTime,
         videoPath,
         code,
         idBundleType,
@@ -30,10 +35,13 @@ BEGIN
         0,
         0,
         @itemCount,
+        @countStartedAt,
+        @countFinishedAt,
+        @countTime,
         @videoPath,
         @bundleCode,
         @idBundleType,
-        @countedAt,
+        SYSUTCDATETIME(),
         1
     );
 END;
